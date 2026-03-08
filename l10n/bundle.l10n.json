@@ -1,0 +1,10 @@
+{
+  "No active LaTeX file found.": "No active LaTeX file found.",
+  "TeXify Terminal": "TeXify Terminal",
+  "The companion LaTeX extension \"LaTeX\" is already installed.": "The companion LaTeX extension \"LaTeX\" is already installed.",
+  "The companion LaTeX extension integration is disabled.": "The companion LaTeX extension integration is disabled.",
+  "Install": "Install",
+  "Show extension": "Show extension",
+  "Not now": "Not now",
+  "TeXify can optionally install the companion LaTeX extension \"LaTeX\" (mathematic.vscode-latex) for syntax highlighting and formatting.": "TeXify can optionally install the companion LaTeX extension \"LaTeX\" (mathematic.vscode-latex) for syntax highlighting and formatting."
+}

@@ -1,0 +1,101 @@
+{
+  "name": "texify",
+  "displayName": "%extension.displayName%",
+  "description": "%extension.description%",
+  "version": "0.0.1",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "latex",
+    "tex",
+    "outline",
+    "build",
+    "formatting"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomas-schuster/texify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thomas-schuster/texify/issues"
+  },
+  "homepage": "https://github.com/thomas-schuster/texify#readme",
+  "activationEvents": [
+    "onLanguage:latex"
+  ],
+  "l10n": "./l10n",
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "latex",
+        "extensions": [
+          ".tex",
+          ".latex"
+        ],
+        "aliases": [
+          "LaTeX",
+          "latex"
+        ]
+      }
+    ],
+    "commands": [
+      { "command": "texify.compile", "title": "%command.compile.title%", "icon": "$(play)" },
+      { "command": "texify.installCompanionExtension", "title": "%command.installCompanionExtension.title%" },
+      { "command": "texify.action1", "title": "%command.action1.title%" },
+      { "command": "texify.action2", "title": "%command.action2.title%" },
+      { "command": "texify.action3", "title": "%command.action3.title%" },
+      { "command": "texify.action4", "title": "%command.action4.title%" },
+      { "command": "texify.action5", "title": "%command.action5.title%" }
+    ],
+    "keybindings": [
+      { "command": "texify.action1", "key": "ctrl+alt+1", "mac": "cmd+alt+1", "when": "editorLangId == latex" },
+      { "command": "texify.action2", "key": "ctrl+alt+2", "mac": "cmd+alt+2", "when": "editorLangId == latex" },
+      { "command": "texify.action3", "key": "ctrl+alt+3", "mac": "cmd+alt+3", "when": "editorLangId == latex" },
+      { "command": "texify.action4", "key": "ctrl+alt+4", "mac": "cmd+alt+4", "when": "editorLangId == latex" },
+      { "command": "texify.action5", "key": "ctrl+alt+5", "mac": "cmd+alt+5", "when": "editorLangId == latex" }
+    ],
+    "menus": {
+      "editor/title": [
+        { "when": "resourceLangId == latex", "command": "texify.compile", "group": "navigation" }
+      ]
+    },
+    "configuration": {
+      "title": "%configuration.title%",
+      "properties": {
+        "texify.enableCompanionExtension": { "type": "boolean", "default": false, "description": "%configuration.enableCompanionExtension.description%" },
+        "texify.compilerCommand": { "type": "string", "default": ".build-kit/bin/tex-compile.sh", "description": "%configuration.compilerCommand.description%" },
+        "texify.compilerArgs": { "type": "string", "default": "-i \"${file}\"", "description": "%configuration.compilerArgs.description%" },
+        "texify.action1Command": { "type": "string", "default": "", "description": "%configuration.action1Command.description%" },
+        "texify.action1Args": { "type": "string", "default": "\"${file}\"", "description": "%configuration.action1Args.description%" },
+        "texify.action2Command": { "type": "string", "default": "", "description": "%configuration.action2Command.description%" },
+        "texify.action2Args": { "type": "string", "default": "\"${file}\"", "description": "%configuration.action2Args.description%" },
+        "texify.action3Command": { "type": "string", "default": "", "description": "%configuration.action3Command.description%" },
+        "texify.action3Args": { "type": "string", "default": "\"${file}\"", "description": "%configuration.action3Args.description%" },
+        "texify.action4Command": { "type": "string", "default": "", "description": "%configuration.action4Command.description%" },
+        "texify.action4Args": { "type": "string", "default": "\"${file}\"", "description": "%configuration.action4Args.description%" },
+        "texify.action5Command": { "type": "string", "default": "", "description": "%configuration.action5Command.description%" },
+        "texify.action5Args": { "type": "string", "default": "\"${file}\"", "description": "%configuration.action5Args.description%" }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "package:vsix": "vsce package"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^3.2.2",
+    "@types/vscode": "^1.80.0",
+    "@types/node": "^16.18.38",
+    "typescript": "^5.1.6"
+  }
+}
