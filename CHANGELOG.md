@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 0.0.1
+## 0.42.0
 
 - Initial release of TeXify
 - Added LaTeX outline and document symbols
