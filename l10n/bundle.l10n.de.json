@@ -1,10 +1,12 @@
 {
   "No active LaTeX file found.": "Keine aktive LaTeX-Datei gefunden.",
+  "Open a LaTeX file with language mode \"latex\" to populate the Outline view.": "Oeffne eine LaTeX-Datei mit dem Sprachmodus \"latex\", damit die Outline gefuellt wird.",
   "TeXify Terminal": "TeXify Terminal",
   "The companion LaTeX extension \"LaTeX\" is already installed.": "Die begleitende LaTeX-Erweiterung \"LaTeX\" ist bereits installiert.",
   "The companion LaTeX extension integration is disabled.": "Die Integration der begleitenden LaTeX-Erweiterung ist deaktiviert.",
   "Install": "Installieren",
   "Show extension": "Erweiterung anzeigen",
   "Not now": "Jetzt nicht",
+  "Question {0}": "Aufgabe {0}",
   "TeXify can optionally install the companion LaTeX extension \"LaTeX\" (mathematic.vscode-latex) for syntax highlighting and formatting.": "TeXify kann optional die begleitende LaTeX-Erweiterung \"LaTeX\" (mathematic.vscode-latex) fuer Syntaxhervorhebung und Formatierung installieren."
 }

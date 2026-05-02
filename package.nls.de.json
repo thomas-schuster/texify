@@ -1,6 +1,7 @@
 {
   "extension.displayName": "TeXify",
   "extension.description": "Bietet eine Gliederungsansicht, Dokumentsymbole und Build-Skripte fuer LaTeX-Dateien.",
+  "command.openOutline.title": "TeXify: Outline oeffnen",
   "command.compile.title": "TeXify: Kompilieren",
   "command.installCompanionExtension.title": "TeXify: Begleitende LaTeX-Erweiterung installieren",
   "command.action1.title": "TeXify: Benutzeraktion 1",

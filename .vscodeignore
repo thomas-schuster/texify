@@ -1,0 +1,12 @@
+.vscode/**
+src/**
+tsconfig.json
+.gitignore
+.vscodeignore
+node_modules/**
+!node_modules/@vscode/**
+!node_modules/@types/**
+!node_modules/typescript/**
+!media/**
+out/test/**
+test.js

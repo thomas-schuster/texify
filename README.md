@@ -7,24 +7,35 @@ Repository: https://github.com/thomas-schuster/texify
 ## Features
 
 - Outline support for LaTeX files in the VS Code Outline view
-- Support for nested section commands such as `\\subsubsubsection`
-- Compile button in the editor title area for active LaTeX files
+- Support for nested section commands such as `\subsubsubsection`
+- Compile button in the editor title area for active LaTeX files (**requires** manual script configuration)
 - Five additional configurable actions for scripts or direct compiler commands
-- Optional installation prompt for the companion LaTeX extension `mathematic.vscode-latex`
 - Localized extension metadata and runtime messages in English, German, and French
+- **Optional** installation prompt for the companion LaTeX extension `mathematic.vscode-latex`
 
 ## Outline Support
 
 TeXify contributes document symbols so that LaTeX headings appear in the Outline view.
 
+You can open the built-in Outline view manually in two ways:
+- run the command `TeXify: Open Outline`
+- open the Explorer sidebar and show the `Outline` view
+
+Important:
+- the Outline is the built-in VS Code Outline view, not a custom TeXify sidebar
+- it is populated from the currently active editor, not from the whole workspace
+- the active file must use the language mode `latex`
+
 Supported structural commands include:
-- `\\part`
-- `\\chapter`
-- `\\section`
-- `\\subsection`
-- arbitrary nested `\\sub...section`
-- `\\paragraph`
-- arbitrary nested `\\sub...paragraph`
+- `\part`
+- `\chapter`
+- `\section`
+- `\subsection`
+- arbitrary nested `\sub...section`
+- `\paragraph`
+- arbitrary nested `\sub...paragraph`
+- `\question`
+- `\part`
 
 ## Build and Script Actions
 
@@ -36,12 +47,12 @@ The button is intentionally generic. You can point it to:
 - a direct compiler command such as `lualatex`, `pdflatex`, `xelatex`, or another executable
 
 Arguments are configured separately, so setups such as these are possible:
-- script-based: `.build-kit/bin/tex-compile.sh` with `-i "${file}"`
+- script-based, such as: `.build-kit/bin/tex-compile.sh` with `-i "${file}"`
 - direct compiler call: `lualatex` with `-interaction=nonstopmode "${file}"`
 - custom toolchain command with additional flags
 
-Important:
-- TeXify does not ship your compile script or build toolkit
+**Important**:
+- TeXify **does not ship your compile script** or build toolkit
 - if you reference a script path, that script must exist in your project or on the target machine
 - `${file}` is replaced with the active LaTeX file path when the command is executed
 
@@ -61,7 +72,7 @@ Main settings:
 
 ## Companion Extension
 
-TeXify can optionally prompt the user to install the companion LaTeX extension:
+TeXify can prompt the user to optionally install the companion LaTeX extension:
 - Name: `LaTeX`
 - ID: `mathematic.vscode-latex`
 

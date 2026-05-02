@@ -3,7 +3,7 @@
   "publisher": "ThomasSchuster",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "0.42.0",
+  "version": "0.42.1",
   "license": "MIT",
   "icon": "media/icon.png",
   "engines": {
@@ -47,6 +47,7 @@
       }
     ],
     "commands": [
+      { "command": "texify.openOutline", "title": "%command.openOutline.title%", "icon": "$(list-tree)" },
       { "command": "texify.compile", "title": "%command.compile.title%", "icon": "$(play)" },
       { "command": "texify.installCompanionExtension", "title": "%command.installCompanionExtension.title%" },
       { "command": "texify.action1", "title": "%command.action1.title%" },

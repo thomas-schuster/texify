@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.42.1
+
+- Added outline support for exam class environments (such as \question and \part)  
+
 ## 0.42.0
 
 - Initial release of TeXify

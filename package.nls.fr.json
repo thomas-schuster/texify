@@ -1,6 +1,7 @@
 {
   "extension.displayName": "TeXify",
   "extension.description": "Fournit une vue de plan, des symboles de document et des scripts de compilation pour les fichiers LaTeX.",
+  "command.openOutline.title": "TeXify: Ouvrir le plan",
   "command.compile.title": "TeXify: Compiler",
   "command.installCompanionExtension.title": "TeXify: Installer l'extension LaTeX complementaire",
   "command.action1.title": "TeXify: Action personnalisee 1",

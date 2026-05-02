@@ -78,6 +78,22 @@ export function activate(context: vscode.ExtensionContext) {
         terminal.sendText(`${cmd} ${args}`);
     }
 
+    async function openOutlineView() {
+        await vscode.commands.executeCommand('workbench.view.explorer');
+        await vscode.commands.executeCommand('outline.focus');
+
+        const editor = vscode.window.activeTextEditor;
+        if (!editor || editor.document.languageId !== 'latex') {
+            void vscode.window.showInformationMessage(
+                vscode.l10n.t('Open a LaTeX file with language mode "latex" to populate the Outline view.')
+            );
+        }
+    }
+
+    context.subscriptions.push(vscode.commands.registerCommand('texify.openOutline', () => {
+        return openOutlineView();
+    }));
+
     // main compile command
     context.subscriptions.push(vscode.commands.registerCommand('texify.compile', () => {
         runScriptCommand('compiler', '.build-kit/bin/tex-compile.sh');
@@ -112,9 +128,11 @@ export function activate(context: vscode.ExtensionContext) {
 function getStructureLevel(type: string): number {
     if (type === 'part') { return 0; }
     if (type === 'chapter') { return 1; }
-    
+    if (type === 'question') { return 50; }
+    if (type === 'exampart') { return 51; }
+
     const subCount = (type.match(/sub/g) || []).length;
-    
+
     if (type.endsWith('section')) {
         return 2 + subCount;
     }
@@ -133,20 +151,57 @@ class LatexDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
         const symbolStack: { symbol: vscode.DocumentSymbol; level: number }[] = [];
 
         // match structural LaTeX commands like \section{Title}, \subsection*{Subtitle}, \subsubsubsection{...}
-        const regex = /^\s*\\(part|chapter|(?:sub)*section|(?:sub)*paragraph)\*?(?:\[[^\]]*\])?\{([^}]+)\}/;
+        const structuralRegex = /^\s*\\(part|chapter|(?:sub)*section|(?:sub)*paragraph)\*?(?:\[[^\]]*\])?\{([^}]+)\}/;
+        // match exam-style commands: \question and \part without a mandatory {title} argument
+        const examRegex = /^\s*\\(question|part)\s*(?:\[([^\]]*)\])?\s*(?!\{)/;
+
+        let questionCount = 0;
+        let partCount = 0;
 
         for (let i = 0; i < document.lineCount; i++) {
             const line = document.lineAt(i);
-            const match = line.text.match(regex);
 
-            if (match) {
-                const type = match[1];
-                const title = match[2];
+            let type: string | undefined;
+            let title: string | undefined;
+            let detail: string | undefined;
+
+            const structMatch = line.text.match(structuralRegex);
+            if (structMatch) {
+                type = structMatch[1];
+                title = structMatch[2];
+                detail = type;
+            } else {
+                const examMatch = line.text.match(examRegex);
+                if (examMatch) {
+                    const cmd = examMatch[1];
+                    const points = examMatch[2];
+                    if (cmd === 'question') {
+                        questionCount++;
+                        partCount = 0;
+                        type = 'question';
+                        const label = vscode.l10n.t('Question {0}', questionCount);
+                        title = points ? `${label} [${points}]` : label;
+                        detail = 'question';
+                    } else {
+                        // \part without {title} → exam part
+                        partCount++;
+                        type = 'exampart';
+                        const letter = String.fromCharCode(96 + partCount); // a, b, c, ...
+                        const label = `(${letter})`;
+                        title = points ? `${label} [${points}]` : label;
+                        detail = 'part';
+                    }
+                }
+            }
+
+            if (type === undefined || title === undefined) { continue; }
+
+            {
                 const level = getStructureLevel(type);
 
                 const symbol = new vscode.DocumentSymbol(
                     title,
-                    type,
+                    detail ?? type,
                     vscode.SymbolKind.String,
                     line.range,
                     line.range
