@@ -154,9 +154,15 @@ class LatexDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
         const structuralRegex = /^\s*\\(part|chapter|(?:sub)*section|(?:sub)*paragraph)\*?(?:\[[^\]]*\])?\{([^}]+)\}/;
         // match exam-style commands: \question and \part without a mandatory {title} argument
         const examRegex = /^\s*\\(question|part)\s*(?:\[([^\]]*)\])?\s*(?!\{)/;
+        // match Beamer frames: \begin{frame}[opts]{Title} or \begin{frame}{Title} or \begin{frame}
+        const beamerFrameRegex = /^\s*\\begin\{frame\}(?:\[[^\]]*\])*(?:\{([^}]*)\})?/;
+        const beamerEndFrameRegex = /^\s*\\end\{frame\}/;
+        const frameTitleRegex = /^\s*\\frametitle(?:\[[^\]]*\])?\{([^}]+)\}/;
 
         let questionCount = 0;
         let partCount = 0;
+        let frameCount = 0;
+        let currentFrameLevel: number | undefined;
 
         for (let i = 0; i < document.lineCount; i++) {
             const line = document.lineAt(i);
@@ -191,13 +197,68 @@ class LatexDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                         title = points ? `${label} [${points}]` : label;
                         detail = 'part';
                     }
+                } else {
+                    const beamerEndMatch = line.text.match(beamerEndFrameRegex);
+                    if (beamerEndMatch) {
+                        // Close open frame when \end{frame} is reached
+                        if (currentFrameLevel !== undefined) {
+                            while (symbolStack.length > 0 && symbolStack[symbolStack.length - 1].level >= currentFrameLevel) {
+                                const popped = symbolStack.pop()!;
+                                popped.symbol.range = new vscode.Range(
+                                    popped.symbol.range.start,
+                                    line.range.end
+                                );
+                            }
+                            currentFrameLevel = undefined;
+                        }
+                        continue;
+                    }
+
+                    const beamerFrameMatch = line.text.match(beamerFrameRegex);
+                    if (beamerFrameMatch) {
+                        let frameTitle = beamerFrameMatch[1];
+                        if (!frameTitle) {
+                            // Look ahead for \frametitle{...} on the following lines
+                            for (let j = i + 1; j < Math.min(i + 5, document.lineCount); j++) {
+                                const nextLine = document.lineAt(j);
+                                const frameTitleMatch = nextLine.text.match(frameTitleRegex);
+                                if (frameTitleMatch) {
+                                    frameTitle = frameTitleMatch[1];
+                                    break;
+                                }
+                                if (/^\s*\\(?:begin|end)\{/.test(nextLine.text)) {
+                                    break;
+                                }
+                            }
+                        }
+                        frameCount++;
+                        type = 'frame';
+                        title = frameTitle || vscode.l10n.t('Frame {0}', frameCount);
+                        detail = 'frame';
+                    }
                 }
             }
 
             if (type === undefined || title === undefined) { continue; }
 
             {
-                const level = getStructureLevel(type);
+                let level: number;
+                if (type === 'frame') {
+                    // Dynamic level: one deeper than the nearest non-frame structural parent.
+                    // Skip any frames on top of the stack to avoid infinite nesting
+                    // when \end{frame} is missing.
+                    let structuralParentLevel = -1;
+                    for (let k = symbolStack.length - 1; k >= 0; k--) {
+                        if (symbolStack[k].symbol.detail !== 'frame') {
+                            structuralParentLevel = symbolStack[k].level;
+                            break;
+                        }
+                    }
+                    level = structuralParentLevel >= 0 ? structuralParentLevel + 1 : 1;
+                    currentFrameLevel = level;
+                } else {
+                    level = getStructureLevel(type);
+                }
 
                 const symbol = new vscode.DocumentSymbol(
                     title,
