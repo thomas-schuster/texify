@@ -8,6 +8,8 @@ Repository: https://github.com/thomas-schuster/texify
 
 - Outline support for LaTeX files in the VS Code Outline view
 - Support for nested section commands such as `\subsubsubsection`
+- Outline support for `exam` class environments (`\question`, `\part`)
+- Outline support for Beamer frames (`\begin{frame}` with frame title)
 - Compile button in the editor title area for active LaTeX files (**requires** manual script configuration)
 - Five additional configurable actions for scripts or direct compiler commands
 - Localized extension metadata and runtime messages in English, German, and French
@@ -34,8 +36,13 @@ Supported structural commands include:
 - arbitrary nested `\sub...section`
 - `\paragraph`
 - arbitrary nested `\sub...paragraph`
+
+`exam` class environments:
 - `\question`
 - `\part`
+
+Beamer frames:
+- `\begin{frame}` – frame titles are shown and frames are nested dynamically based on their structural context (`\section`, `\subsection`, etc.)
 
 ## Build and Script Actions
 
