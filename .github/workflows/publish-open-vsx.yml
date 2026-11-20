@@ -18,4 +18,4 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npm run build
-      - run: npx ovsx publish *.vsix
+      - run: npx --yes ovsx@latest publish --trusted-publishing *.vsix
