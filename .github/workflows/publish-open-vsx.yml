@@ -18,4 +18,7 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npm run build
-      - run: npx --yes ovsx@latest publish --trusted-publishing *.vsix
+      - name: Publish to Open VSX
+        run: npx --yes ovsx@latest publish --trusted-publishing *.vsix
+      - name: Publish to VS Code Marketplace
+        run: npx vsce publish --oidc --packagePath *.vsix
